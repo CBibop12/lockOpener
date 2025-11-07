@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Lock, User, AlertCircle } from 'lucide-react';
+import { getApiUrl } from '../config/api.js';
 import './AdminLogin.css';
 
 function AdminLogin({ onLogin }) {
@@ -15,7 +16,7 @@ function AdminLogin({ onLogin }) {
 
         try {
             // Проверяем учетные данные через API
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/admin/verify`, {
+            const response = await fetch(`${getApiUrl()}/admin/verify`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ordersAPI } from '../api/client';
+import { getApiUrl } from '../config/api.js';
 import AdminLogin from './AdminLogin';
 import {
     Bell,
@@ -46,7 +47,7 @@ function AdminPanel() {
 
         try {
             // Проверяем учетные данные через API
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/admin/verify`, {
+            const response = await fetch(`${getApiUrl()}/admin/verify`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
