@@ -1,0 +1,206 @@
+/* Order View - Simplified Tech Style */
+:root {
+  --primary-orange: #FF6B35;
+  --secondary-orange: #F7931E;
+  --accent-blue: #2563eb;
+  --dark: #0f172a;
+  --dark-gray: #1e293b;
+  --medium-gray: #334155;
+  --light-gray: #e2e8f0;
+  --white: #ffffff;
+  --success-green: #10b981;
+  --text-dark: #1e293b;
+  --text-light: #64748b;
+}
+
+.order-view-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--dark) 0%, var(--dark-gray) 100%);
+  padding: 2rem 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.order-view-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.order-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--light-gray);
+}
+
+.order-header h1 {
+  color: var(--text-dark);
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.order-timer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--primary-orange);
+}
+
+.order-timer svg {
+  color: var(--primary-orange);
+  flex-shrink: 0;
+}
+
+.timer-label {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timer-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+}
+
+.order-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.detail-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 8px;
+  border-left: 4px solid var(--accent-blue);
+}
+
+.detail-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 6px;
+  flex-shrink: 0;
+  color: var(--accent-blue);
+}
+
+.detail-section h3 {
+  color: var(--text-dark);
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-section p {
+  margin: 0;
+  color: var(--text-dark);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.detail-section a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.detail-section a:hover {
+  color: var(--primary-orange);
+  text-decoration: underline;
+}
+
+.order-actions {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--light-gray);
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 0.875rem 2rem;
+  background: var(--light-gray);
+  color: var(--text-dark);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #cbd5e0;
+}
+
+.loading,
+.error-message {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 2rem auto;
+  color: var(--text-dark);
+}
+
+.error-message {
+  color: #dc2626;
+  background: #fee2e2;
+  border: 2px solid #fca5a5;
+  border-left: 4px solid #dc2626;
+}
+
+.error-message button {
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .order-view-wrapper {
+    padding: 1.5rem;
+  }
+
+  .order-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .timer-value {
+    font-size: 1.25rem;
+  }
+
+  .detail-section {
+    padding: 1rem;
+  }
+}
