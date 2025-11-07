@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Clock, Zap, Shield, BadgeCheck, Home, Car, Lock, Package, Phone, MapPin } from 'lucide-react';
 import OrdersList from './OrdersList';
+import { ordersAPI } from '../api/client';
 import './Landing.css';
 
 const translations = {
@@ -156,47 +157,38 @@ function Landing() {
         setFormStatus({ type: '', message: '' });
 
         try {
-            const response = await fetch('/api/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+            const response = await ordersAPI.create({
+                client: {
+                    name: formData.name,
+                    phone: formData.phone
                 },
-                body: JSON.stringify({
-                    client: {
-                        name: formData.name,
-                        phone: formData.phone
-                    },
-                    address: {
-                        street: formData.street,
-                        city: formData.city
-                    },
-                    consent: {
-                        gdpr: formData.gdpr
-                    }
-                })
+                address: {
+                    street: formData.street,
+                    city: formData.city
+                },
+                consent: {
+                    gdpr: formData.gdpr
+                }
             });
 
-            const data = await response.json();
+            const data = response.data;
 
-            if (response.ok) {
-                setFormStatus({ type: 'success', message: t.formSuccess });
+            setFormStatus({ type: 'success', message: t.formSuccess });
 
-                // Извлекаем токен из viewUrl
-                const viewUrl = data.viewUrl;
-                const url = new URL(viewUrl);
-                const viewToken = url.searchParams.get('t');
+            // Извлекаем токен из viewUrl
+            const viewUrl = data.viewUrl;
+            const url = new URL(viewUrl);
+            const viewToken = url.searchParams.get('t');
 
-                navigate('/order-success', {
-                    state: {
-                        orderId: data.orderId,
-                        viewToken: viewToken,
-                    }
-                });
-            } else {
-                setFormStatus({ type: 'error', message: data.error || t.formError });
-            }
-        } catch {
-            setFormStatus({ type: 'error', message: t.formError });
+            navigate('/order-success', {
+                state: {
+                    orderId: data.orderId,
+                    viewToken: viewToken,
+                }
+            });
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || t.formError;
+            setFormStatus({ type: 'error', message: errorMessage });
         } finally {
             setIsSubmitting(false);
         }
