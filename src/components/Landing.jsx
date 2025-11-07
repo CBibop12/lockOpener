@@ -10,7 +10,7 @@ const translations = {
         // Header
         logoText: 'Locksmith',
         logoSubtext: 'Kraków',
-        headerPhone: '+48 123 456 789',
+        headerPhone: '+48 536 409 660',
         headerSlogan: 'Dostępni 24/7',
         orderBtn: 'Zamów usługę',
 
@@ -68,7 +68,7 @@ const translations = {
         // Header
         logoText: 'Locksmith',
         logoSubtext: 'Kraków',
-        headerPhone: '+48 123 456 789',
+        headerPhone: '+48 536 409 660',
         headerSlogan: 'Available 24/7',
         orderBtn: 'Order Service',
 
