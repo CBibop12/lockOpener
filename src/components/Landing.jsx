@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Clock, Zap, Shield, BadgeCheck, Home, Car, Lock, Package, Phone, MapPin } from 'lucide-react';
+import { Clock, Zap, Shield, BadgeCheck, Home, Car, KeyRound, Package, Phone, MapPin } from 'lucide-react';
 import OrdersList from './OrdersList';
 import { ordersAPI } from '../api/client';
 import './Landing.css';
@@ -37,8 +37,8 @@ const translations = {
         service1Desc: 'Otwieranie drzwi wejściowych i wewnętrznych',
         service2Title: 'Otwieranie samochodów',
         service2Desc: 'Otwieranie drzwi i bagażników bez uszkodzeń',
-        service3Title: 'Otwieranie sejfów',
-        service3Desc: 'Profesjonalne otwieranie sejfów i skrytek',
+        service3Title: 'Regeneracja zamków stacyjki + wymiana',
+        service3Desc: 'Regeneracja i wymiana zamków stacyjki (zapłonu)',
         service4Title: 'Inne usługi',
         service4Desc: 'Otwieranie wszelkich zamków i urządzeń zabezpieczających',
 
@@ -95,8 +95,8 @@ const translations = {
         service1Desc: 'Opening entrance and interior doors',
         service2Title: 'Car opening',
         service2Desc: 'Opening doors and trunks without damage',
-        service3Title: 'Safe opening',
-        service3Desc: 'Professional opening of safes and lockboxes',
+        service3Title: 'Ignition lock regeneration + replacement',
+        service3Desc: 'Regeneration and replacement of ignition locks',
         service4Title: 'Other services',
         service4Desc: 'Opening all types of locks and security devices',
 
@@ -291,7 +291,7 @@ function Landing() {
                         </div>
                         <div className="service-card">
                             <div className="service-icon-wrapper">
-                                <Lock size={48} strokeWidth={1.5} />
+                                <KeyRound size={48} strokeWidth={1.5} />
                             </div>
                             <h4>{t.service3Title}</h4>
                             <p>{t.service3Desc}</p>
