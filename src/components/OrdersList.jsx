@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ordersAPI } from '../api/client';
 import { Clock, Car } from 'lucide-react';
 import './OrdersList.css';
 
@@ -62,6 +61,10 @@ function OrdersList() {
     const checkOrdersStatus = async () => {
         const savedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
         const ordersToRemove = [];
+        if (savedOrders.length === 0) return;
+
+        // axios грузится только если есть сохранённые заказы — не утяжеляет первую загрузку лендинга
+        const { ordersAPI } = await import('../api/client');
 
         // Проверяем каждый заказ через API
         for (const order of savedOrders) {

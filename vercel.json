@@ -1,8 +1,8 @@
 {
     "rewrites": [
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
-        }
+        { "source": "/order", "destination": "/app.html" },
+        { "source": "/order-success", "destination": "/app.html" },
+        { "source": "/orders/:id", "destination": "/app.html" },
+        { "source": "/moonpanel-473", "destination": "/app.html" }
     ]
 }

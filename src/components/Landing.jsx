@@ -1,132 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Clock, Zap, Shield, BadgeCheck, Home, Car, KeyRound, Package, Phone, MapPin } from 'lucide-react';
+import { Clock, Zap, Shield, BadgeCheck, Phone } from 'lucide-react';
 import OrdersList from './OrdersList';
-import { ordersAPI } from '../api/client';
+import { pageMeta } from '../seo';
+import { translations } from '../translations';
+import { services, servicePath } from '../services';
+import { serviceIcons } from './serviceIcons';
+import SiteHeader from './SiteHeader';
 import './Landing.css';
 
-const translations = {
-    pl: {
-        // Header
-        logoText: 'Locksmith',
-        logoSubtext: 'Kraków',
-        headerPhone: '+48 536 409 660',
-        headerSlogan: 'Dostępni 24/7',
-        orderBtn: 'Zamów usługę',
+// Карточки на лендинге ведут на страницы услуг (src/services.js)
+const serviceCards = [
+    { key: 'door', title: 'service1Title', desc: 'service1Desc' },
+    { key: 'car', title: 'service2Title', desc: 'service2Desc' },
+    { key: 'ignition', title: 'service3Title', desc: 'service3Desc' },
+    { key: 'locks', title: 'service4Title', desc: 'service4Desc' },
+];
 
-        // Hero
-        heroTitle: 'Profesjonalne Otwieranie Zamków w Krakowie',
-        heroSubtitle: 'Pomoc 24/7 - Szybko, Bezpiecznie, Profesjonalnie',
-        heroDescription: 'Zamknięte drzwi? Zgubione klucze? Zepsuty zamek? Jesteśmy do Twojej dyspozycji przez całą dobę!',
-        heroBtn: 'Zamów teraz',
-
-        // Features
-        featuresTitle: 'Dlaczego my?',
-        feature1Title: 'Dostępność 24/7',
-        feature1Desc: 'Pracujemy przez całą dobę, 7 dni w tygodniu',
-        feature2Title: 'Szybka reakcja',
-        feature2Desc: 'Docieramy na miejsce w ciągu 30 minut',
-        feature3Title: 'Profesjonalizm',
-        feature3Desc: 'Doświadczeni specjaliści z nowoczesnym sprzętem',
-        feature4Title: 'Przejrzyste ceny',
-        feature4Desc: 'Uczciwe ceny bez ukrytych opłat',
-
-        // Services
-        servicesTitle: 'Nasze usługi',
-        service1Title: 'Otwieranie mieszkań',
-        service1Desc: 'Otwieranie drzwi wejściowych i wewnętrznych',
-        service2Title: 'Otwieranie samochodów',
-        service2Desc: 'Otwieranie drzwi i bagażników bez uszkodzeń',
-        service3Title: 'Regeneracja zamków stacyjki + wymiana',
-        service3Desc: 'Regeneracja i wymiana zamków stacyjki (zapłonu)',
-        service4Title: 'Inne usługi',
-        service4Desc: 'Otwieranie wszelkich zamków i urządzeń zabezpieczających',
-
-        // Contact form section
-        contactTitle: 'Potrzebujesz pomocy teraz?',
-        contactSubtitle: 'Wypełnij formularz - skontaktujemy się natychmiast',
-
-        // Form
-        formName: 'Imię',
-        formNamePlaceholder: 'Twoje imię',
-        formPhone: 'Telefon',
-        formPhonePlaceholder: '+48xxxxxxxxx',
-        formAddress: 'Adres',
-        formAddressPlaceholder: 'ul. Przykładowa 123',
-        formCity: 'Miasto',
-        formCityPlaceholder: 'Kraków',
-        formGdpr: 'Wyrażam zgodę na przetwarzanie danych osobowych (RODO)',
-        formSubmit: 'Wyślij zgłoszenie',
-        formSubmitting: 'Wysyłanie...',
-        formError: 'Błąd. Spróbuj ponownie.',
-        formSuccess: 'Zgłoszenie wysłane pomyślnie!',
-
-        // Footer
-        footerText: `© ${new Date().getFullYear()} Locksmith Kraków. Wszelkie prawa zastrzeżone.`,
-    },
-    en: {
-        // Header
-        logoText: 'Locksmith',
-        logoSubtext: 'Kraków',
-        headerPhone: '+48 536 409 660',
-        headerSlogan: 'Available 24/7',
-        orderBtn: 'Order Service',
-
-        // Hero
-        heroTitle: 'Professional Lock Opening in Krakow',
-        heroSubtitle: '24/7 Help - Fast, Safe, Professional',
-        heroDescription: 'Locked out? Lost keys? Broken lock? We are at your service around the clock!',
-        heroBtn: 'Order now',
-
-        // Features
-        featuresTitle: 'Why choose us?',
-        feature1Title: '24/7 Availability',
-        feature1Desc: 'We work around the clock, 7 days a week',
-        feature2Title: 'Quick response',
-        feature2Desc: 'We arrive within 30 minutes',
-        feature3Title: 'Professionalism',
-        feature3Desc: 'Experienced specialists with modern equipment',
-        feature4Title: 'Transparent pricing',
-        feature4Desc: 'Fair prices with no hidden fees',
-
-        // Services
-        servicesTitle: 'Our services',
-        service1Title: 'Apartment opening',
-        service1Desc: 'Opening entrance and interior doors',
-        service2Title: 'Car opening',
-        service2Desc: 'Opening doors and trunks without damage',
-        service3Title: 'Ignition lock regeneration + replacement',
-        service3Desc: 'Regeneration and replacement of ignition locks',
-        service4Title: 'Other services',
-        service4Desc: 'Opening all types of locks and security devices',
-
-        // Contact form section
-        contactTitle: 'Need help now?',
-        contactSubtitle: 'Fill out the form - we will contact you immediately',
-
-        // Form
-        formName: 'Name',
-        formNamePlaceholder: 'Your name',
-        formPhone: 'Phone',
-        formPhonePlaceholder: '+48xxxxxxxxx',
-        formAddress: 'Address',
-        formAddressPlaceholder: 'Example Street 123',
-        formCity: 'City',
-        formCityPlaceholder: 'Krakow',
-        formGdpr: 'I consent to the processing of personal data (GDPR)',
-        formSubmit: 'Submit request',
-        formSubmitting: 'Submitting...',
-        formError: 'Error. Please try again.',
-        formSuccess: 'Request submitted successfully!',
-
-        // Footer
-        footerText: `© ${new Date().getFullYear()} Locksmith Kraków. All rights reserved.`,
-    }
-};
-
-function Landing() {
+function Landing({ lang = 'pl' }) {
     const navigate = useNavigate();
-    const [lang, setLang] = useState('pl');
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
@@ -139,9 +31,11 @@ function Landing() {
 
     const t = translations[lang];
 
-    const toggleLanguage = () => {
-        setLang(prevLang => prevLang === 'pl' ? 'en' : 'pl');
-    };
+    // Нужно при клиентской навигации; при прямом заходе head уже отрендерен prerender'ом
+    useEffect(() => {
+        document.title = pageMeta[lang].title;
+        document.documentElement.lang = pageMeta[lang].htmlLang;
+    }, [lang]);
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -157,6 +51,8 @@ function Landing() {
         setFormStatus({ type: '', message: '' });
 
         try {
+            // axios грузится только при отправке формы — не утяжеляет первую загрузку лендинга
+            const { ordersAPI } = await import('../api/client');
             const response = await ordersAPI.create({
                 client: {
                     name: formData.name,
@@ -196,74 +92,55 @@ function Landing() {
 
     return (
         <div className="landing-container">
-            {/* Header */}
-            <header className="landing-header">
-                <div className="header-content">
-                    <div className="logo-container">
-                        <div className="logo-placeholder">
-                            <img src="/logo.png" alt="Locksmith" />
-                        </div>
-                        <div className="logo-text">
-                            <h1 className="logo">
-                                {t.logoText}
-                                <span className="logo-location">{t.logoSubtext}</span>
-                            </h1>
-                            <p className="logo-slogan">{t.headerSlogan}</p>
-                        </div>
-                    </div>
-                    <div className="header-actions">
-                        <button className="lang-switcher" onClick={toggleLanguage}>
-                            {lang === 'pl' ? '🇬🇧 EN' : '🇵🇱 PL'}
-                        </button>
-                        <a href={`tel:${t.headerPhone}`} className="header-phone">
-                            <Phone size={20} />
-                            <span>{t.headerPhone}</span>
-                        </a>
-                    </div>
-                </div>
-            </header>
+            <SiteHeader lang={lang} />
 
             {/* Hero Section */}
             <section className="hero">
                 <div className="hero-content">
-                    <h2 className="hero-title">{t.heroTitle}</h2>
+                    <h1 className="hero-title">{t.heroTitle}</h1>
                     <p className="hero-subtitle">{t.heroSubtitle}</p>
                     <p className="hero-description">{t.heroDescription}</p>
-                    <a href="#contact" className="btn-hero">{t.heroBtn}</a>
+                    <div className="hero-actions">
+                        <a href="#contact" className="btn-hero">{t.heroBtn}</a>
+                        <a href={`tel:${t.headerPhone.replace(/\s/g, '')}`} className="btn-hero btn-hero-call">
+                            <Phone size={22} />
+                            <span>{t.headerPhone}</span>
+                        </a>
+                    </div>
                 </div>
             </section>
 
             {/* Features Section */}
             <section className="features">
                 <div className="section-content">
-                    <h3 className="section-title">{t.featuresTitle}</h3>
+                    <h2 className="section-title">{t.featuresTitle}</h2>
                     <div className="features-grid">
                         <div className="feature-card">
                             <div className="feature-icon-wrapper">
                                 <Clock size={48} strokeWidth={1.5} />
                             </div>
-                            <h4>{t.feature1Title}</h4>
+                            <h3>{t.feature1Title}</h3>
                             <p>{t.feature1Desc}</p>
                         </div>
                         <div className="feature-card">
                             <div className="feature-icon-wrapper">
                                 <Zap size={48} strokeWidth={1.5} />
                             </div>
-                            <h4>{t.feature2Title}</h4>
+                            <h3>{t.feature2Title}</h3>
                             <p>{t.feature2Desc}</p>
                         </div>
                         <div className="feature-card">
                             <div className="feature-icon-wrapper">
                                 <Shield size={48} strokeWidth={1.5} />
                             </div>
-                            <h4>{t.feature3Title}</h4>
+                            <h3>{t.feature3Title}</h3>
                             <p>{t.feature3Desc}</p>
                         </div>
                         <div className="feature-card">
                             <div className="feature-icon-wrapper">
                                 <BadgeCheck size={48} strokeWidth={1.5} />
                             </div>
-                            <h4>{t.feature4Title}</h4>
+                            <h3>{t.feature4Title}</h3>
                             <p>{t.feature4Desc}</p>
                         </div>
                     </div>
@@ -273,36 +150,38 @@ function Landing() {
             {/* Services Section */}
             <section className="services">
                 <div className="section-content">
-                    <h3 className="section-title">{t.servicesTitle}</h3>
+                    <h2 className="section-title">{t.servicesTitle}</h2>
                     <div className="services-grid">
-                        <div className="service-card">
-                            <div className="service-icon-wrapper">
-                                <Home size={48} strokeWidth={1.5} />
-                            </div>
-                            <h4>{t.service1Title}</h4>
-                            <p>{t.service1Desc}</p>
-                        </div>
-                        <div className="service-card">
-                            <div className="service-icon-wrapper">
-                                <Car size={48} strokeWidth={1.5} />
-                            </div>
-                            <h4>{t.service2Title}</h4>
-                            <p>{t.service2Desc}</p>
-                        </div>
-                        <div className="service-card">
-                            <div className="service-icon-wrapper">
-                                <KeyRound size={48} strokeWidth={1.5} />
-                            </div>
-                            <h4>{t.service3Title}</h4>
-                            <p>{t.service3Desc}</p>
-                        </div>
-                        <div className="service-card">
-                            <div className="service-icon-wrapper">
-                                <Package size={48} strokeWidth={1.5} />
-                            </div>
-                            <h4>{t.service4Title}</h4>
-                            <p>{t.service4Desc}</p>
-                        </div>
+                        {serviceCards.map(({ key, title, desc }) => {
+                            const Icon = serviceIcons[services[key].icon];
+                            return (
+                                <div className="service-card" key={key}>
+                                    <div className="service-icon-wrapper">
+                                        <Icon size={48} strokeWidth={1.5} />
+                                    </div>
+                                    <h3>
+                                        <a className="service-card-link" href={servicePath(key, lang)}>{t[title]}</a>
+                                    </h3>
+                                    <p>{t[desc]}</p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <p className="services-note">{t.servicesNote}</p>
+                </div>
+            </section>
+
+            {/* FAQ */}
+            <section className="faq">
+                <div className="faq-content">
+                    <h2 className="section-title">{t.faqTitle}</h2>
+                    <div className="faq-list">
+                        {t.faq.map(({ q, a }) => (
+                            <details className="faq-item" key={q}>
+                                <summary><h3>{q}</h3></summary>
+                                <p>{a}</p>
+                            </details>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -310,7 +189,7 @@ function Landing() {
             {/* Contact Form Section */}
             <section className="contact" id="contact">
                 <div className="contact-content">
-                    <h3 className="section-title">{t.contactTitle}</h3>
+                    <h2 className="section-title">{t.contactTitle}</h2>
                     <p className="contact-subtitle">{t.contactSubtitle}</p>
 
                     <form className="contact-form" onSubmit={handleSubmit}>

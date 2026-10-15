@@ -7,6 +7,11 @@ export const getApiUrl = () => {
         return import.meta.env.VITE_API_URL;
     }
 
+    // При пререндере (Node) window нет
+    if (typeof window === 'undefined') {
+        return 'https://lockopener-1ab529db3409.herokuapp.com/api';
+    }
+
     // Для production (не localhost) используем Heroku URL
     const isProduction = window.location.hostname !== 'localhost' &&
         window.location.hostname !== '127.0.0.1' &&
